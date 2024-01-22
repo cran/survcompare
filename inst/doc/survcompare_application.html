@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Survcompare_application</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Survcompare_application</h1>
+
+
+
+<div id="package-background" class="section level2">
+<h2>Package background</h2>
+<p>The package checks whether there are considerable non-linear and
+interaction terms in the data, and quantifies their contributions to the
+models’ performance. Using repeated nested cross-validation (that is, a
+system of random data splits into the training and testing sets to
+evaluate prediction accuracy), the package:</p>
+<ul>
+<li><p>Validates Cox Proportionate Hazards model, or Cox Lasso depending
+on the user’s input. This step employs</p>
+<ul>
+<li><code>survival::coxph()</code> (Therneau, 2023);</li>
+<li><code>glmnet::glmnet(..., family=&quot;cox&quot;)</code> (Simon, Friedman,
+Hastie &amp; Tibshirani , 2011).</li>
+</ul></li>
+<li><p>Validates Survival Random Forest ensembled with the baseline Cox
+model. To fit the ensemble, CoxPH’s out-of-sample predictions are added
+to the list of orignial predictors, which are then used to fit SRF,
+using</p>
+<ul>
+<li><code>randomForestSRC::rfsrc()</code>(Ishwaran &amp; Kogalur,
+2023).</li>
+</ul></li>
+<li><p>Performs statistical testing of whether the Survival Random
+Forest ensemble outperforms the Cox model.</p></li>
+<li><p>It does NOT handle missing data at the moment.</p></li>
+</ul>
+<p>Predictive performance is evaluated by averaging different measures
+across all train-test splits. The following measures are computed:</p>
+<ul>
+<li><p>Discrimination measures: Harrell’s concordance index,
+time-dependent AUCROC.</p></li>
+<li><p>Calibration measures: calibration slope, calibration
+alpha.</p></li>
+<li><p>Overall fit: Brier score, Scaled Brier score.</p></li>
+</ul>
+<p>Performance metrics’ description and definitions can be found, for
+example, in Steyerberg &amp; Vergouwe (2014).</p>
+<div id="references" class="section level5">
+<h5>References:</h5>
+<p>Therneau T (2023). <em>A Package for Survival Analysis in R</em>. R
+package version 3.5-7, <a href="https://CRAN.R-project.org/package=survival" class="uri">https://CRAN.R-project.org/package=survival</a>.</p>
+<p>Simon N, Friedman J, Tibshirani R, Hastie T (2011). “Regularization
+Paths for Cox’s Proportional Hazards Model via Coordinate Descent.”
+<em>Journal of Statistical Software, 39(5)</em>, 1–13. <a href="doi:10.18637/jss.v039.i05" class="uri">doi:10.18637/jss.v039.i05</a>.</p>
+<p>Ishwaran H, Kogalur U (2023). <em>Fast Unified Random Forests for
+Survival, Regression, and Classification (RF-SRC).</em> R package
+version 3.2.2, <a href="https://cran.r-project.org/package=randomForestSRC" class="uri">https://cran.r-project.org/package=randomForestSRC</a></p>
+<p>Steyerberg EW, Vergouwe Y. (2014). Towards better clinical prediction
+models: seven steps for development and an ABCD for validation.
+<em>European heart journal, 35(29)</em>, 1925-1931 <a href="https://doi.org/10.1093/eurheartj/ehu207" class="uri">https://doi.org/10.1093/eurheartj/ehu207</a></p>
+</div>
+<div id="what-can-be-inferred-from-the-survcompare-results" class="section level3">
+<h3>What can be inferred from the <code>survcompare</code> results?</h3>
+<p>There are two possible outcomes: 1) “Survival Random Forest ensemble
+has NOT outperformed CoxPH”, or 2) “Survival Random Forest ensemble has
+outperformed CoxPH by … in C-index”.</p>
+<ol style="list-style-type: decimal">
+<li><p>If there is <em>no outperformance</em>, the test can justify the
+employment of CoxPH model and indicate a negligible advantage of using a
+more flexible model such as Survival Random Forest.</p></li>
+<li><p>In the case of the ensemble’s <em>outperformance</em> of the Cox
+model, a researcher can:</p>
+<ul>
+<li>Employ a more complex or flexible model.</li>
+<li>Look for the interaction and non-linear terms that could be added to
+the CoxPH and re-run the test.</li>
+<li>Consider using the CoxPH model despite its underperformance if the
+difference is not large enough to sacrifice model’s interpretability, or
+negligible in the context of a performed task.</li>
+</ul></li>
+</ol>
+<p>Before interpreting the results, ensure that a sufficient number of
+repetitions (repeat_cv) has been used. Parameter repeat_cv should be at
+least 5, but for a heterogeneous data 20-50 may be needed. Otherwise,
+the results may unreliable and subject to chance.</p>
+</div>
+<div id="why-the-coxph-srf-ensemble-and-not-just-srf" class="section level3">
+<h3>Why the CoxPH-SRF ensemble and not just SRF?</h3>
+<p>The ensemble of CoxPH and SRF takes CoxPH’s predictions and adds them
+to the list of predictors to train SRF. This way, we make sure that
+linearity is captured by the ensembled SRF at least as good as in the
+CoxPH, and hence its outperformance can be fully attributed to the
+qualities of SRF that CoxPH does not have, that is, handling data
+non-linearity.</p>
+</div>
+<div id="package-installation" class="section level3">
+<h3>Package installation</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="co"># devtools::install_github(&quot;dianashams/survcompare&quot;)</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">library</span>(survcompare)</span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="co">#&gt; Loading required package: survival</span></span></code></pre></div>
+</div>
+</div>
+<div id="examples" class="section level2">
+<h2>Examples</h2>
+<div id="example-1.-linear-data" class="section level3">
+<h3>Example 1. Linear data</h3>
+<p>The first example takes simulated data that does not contain any
+complex terms, and CoxPH is expected to perform as good as Survival
+Random Forest.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>mydata <span class="ot">&lt;-</span> <span class="fu">simulate_linear</span>()</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>mypredictors <span class="ot">&lt;-</span> <span class="fu">names</span>(mydata)[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>compare_models <span class="ot">&lt;-</span> <span class="fu">survcompare</span>(mydata, mypredictors)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Cross-validating Cox PH model using 2 repeat(s), 3 outer, 3 inner loops).For SRF inner CV is not used if oob = TRUE (default).&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>  <span class="er">|=</span>                                                                     <span class="er">|</span>   <span class="dv">2</span>%</span>
+<span id="cb2-12"><a href="#cb2-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-13"><a href="#cb2-13" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">17</span>%</span>
+<span id="cb2-14"><a href="#cb2-14" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-15"><a href="#cb2-15" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
+<span id="cb2-16"><a href="#cb2-16" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-17"><a href="#cb2-17" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb2-18"><a href="#cb2-18" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-19"><a href="#cb2-19" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
+<span id="cb2-20"><a href="#cb2-20" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-21"><a href="#cb2-21" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">83</span>%</span>
+<span id="cb2-22"><a href="#cb2-22" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-23"><a href="#cb2-23" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb2-24"><a href="#cb2-24" tabindex="-1"></a><span class="co">#&gt; Time difference of 1.191734 secs</span></span>
+<span id="cb2-25"><a href="#cb2-25" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Cross-validating CoxPH and SRF Ensemble using 2 repeat(s), 3 outer, 3 inner loops).For SRF inner CV is not used if oob = TRUE (default).&quot;</span></span>
+<span id="cb2-26"><a href="#cb2-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-27"><a href="#cb2-27" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-28"><a href="#cb2-28" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb2-29"><a href="#cb2-29" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-30"><a href="#cb2-30" tabindex="-1"></a>  <span class="er">|=</span>                                                                     <span class="er">|</span>   <span class="dv">2</span>%</span>
+<span id="cb2-31"><a href="#cb2-31" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-32"><a href="#cb2-32" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">17</span>%</span>
+<span id="cb2-33"><a href="#cb2-33" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-34"><a href="#cb2-34" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
+<span id="cb2-35"><a href="#cb2-35" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
+<span id="cb2-39"><a href="#cb2-39" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-40"><a href="#cb2-40" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">83</span>%</span>
+<span id="cb2-41"><a href="#cb2-41" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb2-42"><a href="#cb2-42" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb2-43"><a href="#cb2-43" tabindex="-1"></a><span class="co">#&gt; Time difference of 7.5005 secs</span></span>
+<span id="cb2-44"><a href="#cb2-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-45"><a href="#cb2-45" tabindex="-1"></a><span class="co">#&gt; Internally validated test performance of CoxPH     and Survival Random Forest ensemble:</span></span>
+<span id="cb2-46"><a href="#cb2-46" tabindex="-1"></a><span class="co">#&gt;                   T C_score  AUCROC     BS BS_scaled Calib_slope Calib_alpha</span></span>
+<span id="cb2-47"><a href="#cb2-47" tabindex="-1"></a><span class="co">#&gt; CoxPH        8.5678  0.7240  0.7638 0.1475    0.1497      1.1592      0.1614</span></span>
+<span id="cb2-48"><a href="#cb2-48" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.5678  0.6972  0.7290 0.1488    0.1403      1.1451      0.0798</span></span>
+<span id="cb2-49"><a href="#cb2-49" tabindex="-1"></a><span class="co">#&gt; Diff         0.0000 -0.0269 -0.0348 0.0013   -0.0094     -0.0141     -0.0816</span></span>
+<span id="cb2-50"><a href="#cb2-50" tabindex="-1"></a><span class="co">#&gt; pvalue          NaN  0.8910  0.9292 0.5304    0.6168      0.5289      0.9675</span></span>
+<span id="cb2-51"><a href="#cb2-51" tabindex="-1"></a><span class="co">#&gt;               sec</span></span>
+<span id="cb2-52"><a href="#cb2-52" tabindex="-1"></a><span class="co">#&gt; CoxPH        1.19</span></span>
+<span id="cb2-53"><a href="#cb2-53" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 7.50</span></span>
+<span id="cb2-54"><a href="#cb2-54" tabindex="-1"></a><span class="co">#&gt; Diff         6.31</span></span>
+<span id="cb2-55"><a href="#cb2-55" tabindex="-1"></a><span class="co">#&gt; pvalue        NaN</span></span>
+<span id="cb2-56"><a href="#cb2-56" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-57"><a href="#cb2-57" tabindex="-1"></a><span class="co">#&gt; Survival Random Forest ensemble has NOT outperformed CoxPH    with mean c-index difference of-0.0269.</span></span>
+<span id="cb2-58"><a href="#cb2-58" tabindex="-1"></a><span class="co">#&gt; The difference is not statistically significant with the p-value = 0.891. </span></span>
+<span id="cb2-59"><a href="#cb2-59" tabindex="-1"></a><span class="co">#&gt; The data may NOT contain considerable non-linear or cross-term dependencies, </span></span>
+<span id="cb2-60"><a href="#cb2-60" tabindex="-1"></a><span class="co">#&gt; that could be captured by the Survival Random Forest.</span></span>
+<span id="cb2-61"><a href="#cb2-61" tabindex="-1"></a><span class="co">#&gt; C-score: </span></span>
+<span id="cb2-62"><a href="#cb2-62" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.724(95CI=0.685-0.7697;SD=0.0369)</span></span>
+<span id="cb2-63"><a href="#cb2-63" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.6972(95CI=0.6527-0.7312;SD=0.0292)</span></span>
+<span id="cb2-64"><a href="#cb2-64" tabindex="-1"></a><span class="co">#&gt; AUCROC:</span></span>
+<span id="cb2-65"><a href="#cb2-65" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.7638(95CI=0.7137-0.805;SD=0.038)</span></span>
+<span id="cb2-66"><a href="#cb2-66" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.729(95CI=0.6728-0.7642;SD=0.037)</span></span>
+<span id="cb2-67"><a href="#cb2-67" tabindex="-1"></a><span class="fu">summary</span>(compare_models)</span>
+<span id="cb2-68"><a href="#cb2-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-69"><a href="#cb2-69" tabindex="-1"></a><span class="co">#&gt; Internally validated test performance of CoxPH     and Survival Random Forest ensemble:</span></span>
+<span id="cb2-70"><a href="#cb2-70" tabindex="-1"></a><span class="co">#&gt;                   T C_score  AUCROC     BS BS_scaled Calib_slope Calib_alpha</span></span>
+<span id="cb2-71"><a href="#cb2-71" tabindex="-1"></a><span class="co">#&gt; CoxPH        8.5678  0.7240  0.7638 0.1475    0.1497      1.1592      0.1614</span></span>
+<span id="cb2-72"><a href="#cb2-72" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.5678  0.6972  0.7290 0.1488    0.1403      1.1451      0.0798</span></span>
+<span id="cb2-73"><a href="#cb2-73" tabindex="-1"></a><span class="co">#&gt; Diff         0.0000 -0.0269 -0.0348 0.0013   -0.0094     -0.0141     -0.0816</span></span>
+<span id="cb2-74"><a href="#cb2-74" tabindex="-1"></a><span class="co">#&gt; pvalue          NaN  0.8910  0.9292 0.5304    0.6168      0.5289      0.9675</span></span>
+<span id="cb2-75"><a href="#cb2-75" tabindex="-1"></a><span class="co">#&gt;               sec</span></span>
+<span id="cb2-76"><a href="#cb2-76" tabindex="-1"></a><span class="co">#&gt; CoxPH        1.19</span></span>
+<span id="cb2-77"><a href="#cb2-77" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 7.50</span></span>
+<span id="cb2-78"><a href="#cb2-78" tabindex="-1"></a><span class="co">#&gt; Diff         6.31</span></span>
+<span id="cb2-79"><a href="#cb2-79" tabindex="-1"></a><span class="co">#&gt; pvalue        NaN</span></span>
+<span id="cb2-80"><a href="#cb2-80" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb2-81"><a href="#cb2-81" tabindex="-1"></a><span class="co">#&gt; Survival Random Forest ensemble has NOT outperformed CoxPH    with mean c-index difference of-0.0269.</span></span>
+<span id="cb2-82"><a href="#cb2-82" tabindex="-1"></a><span class="co">#&gt; The difference is not statistically significant with the p-value = 0.891. </span></span>
+<span id="cb2-83"><a href="#cb2-83" tabindex="-1"></a><span class="co">#&gt; The data may NOT contain considerable non-linear or cross-term dependencies, </span></span>
+<span id="cb2-84"><a href="#cb2-84" tabindex="-1"></a><span class="co">#&gt; that could be captured by the Survival Random Forest.</span></span>
+<span id="cb2-85"><a href="#cb2-85" tabindex="-1"></a><span class="co">#&gt; C-score: </span></span>
+<span id="cb2-86"><a href="#cb2-86" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.724(95CI=0.685-0.7697;SD=0.0369)</span></span>
+<span id="cb2-87"><a href="#cb2-87" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.6972(95CI=0.6527-0.7312;SD=0.0292)</span></span>
+<span id="cb2-88"><a href="#cb2-88" tabindex="-1"></a><span class="co">#&gt; AUCROC:</span></span>
+<span id="cb2-89"><a href="#cb2-89" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.7638(95CI=0.7137-0.805;SD=0.038)</span></span>
+<span id="cb2-90"><a href="#cb2-90" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.729(95CI=0.6728-0.7642;SD=0.037)</span></span>
+<span id="cb2-91"><a href="#cb2-91" tabindex="-1"></a></span>
+<span id="cb2-92"><a href="#cb2-92" tabindex="-1"></a><span class="co"># Other objects in the output object</span></span>
+<span id="cb2-93"><a href="#cb2-93" tabindex="-1"></a><span class="fu">names</span>(compare_models)</span>
+<span id="cb2-94"><a href="#cb2-94" tabindex="-1"></a><span class="co">#&gt; [1] &quot;results_mean&quot;       &quot;results_mean_train&quot; &quot;return_models&quot;     </span></span>
+<span id="cb2-95"><a href="#cb2-95" tabindex="-1"></a><span class="co">#&gt; [4] &quot;test&quot;               &quot;train&quot;              &quot;difftest&quot;          </span></span>
+<span id="cb2-96"><a href="#cb2-96" tabindex="-1"></a><span class="co">#&gt; [7] &quot;main_stats&quot;         &quot;randomseed&quot;         &quot;useCoxLasso&quot;</span></span></code></pre></div>
+</div>
+<div id="example-2.-non-linear-data-with-interaction-terms" class="section level3">
+<h3>Example 2. Non-linear data with interaction terms</h3>
+<p>The second example takes simulated data that contains non-linear and
+cross-terms, and an outperformance of the tree model is expected. We
+will increase the default number of cross-validation repetitions to get
+a robust estimate, and choose CoxLasso as our baseline linear model.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>mydata2 <span class="ot">&lt;-</span> <span class="fu">simulate_crossterms</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>mypredictors2 <span class="ot">&lt;-</span> <span class="fu">names</span>(mydata)[<span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>compare_models2 <span class="ot">&lt;-</span> <span class="fu">survcompare</span>(mydata2,mypredictors2)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Cross-validating Cox PH model using 2 repeat(s), 3 outer, 3 inner loops).For SRF inner CV is not used if oob = TRUE (default).&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-11"><a href="#cb3-11" tabindex="-1"></a>  <span class="er">|=</span>                                                                     <span class="er">|</span>   <span class="dv">2</span>%</span>
+<span id="cb3-12"><a href="#cb3-12" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-13"><a href="#cb3-13" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">17</span>%</span>
+<span id="cb3-14"><a href="#cb3-14" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-15"><a href="#cb3-15" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
+<span id="cb3-16"><a href="#cb3-16" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-17"><a href="#cb3-17" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb3-18"><a href="#cb3-18" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-19"><a href="#cb3-19" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
+<span id="cb3-20"><a href="#cb3-20" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-21"><a href="#cb3-21" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">83</span>%</span>
+<span id="cb3-22"><a href="#cb3-22" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-23"><a href="#cb3-23" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb3-24"><a href="#cb3-24" tabindex="-1"></a><span class="co">#&gt; Time difference of 0.2443171 secs</span></span>
+<span id="cb3-25"><a href="#cb3-25" tabindex="-1"></a><span class="co">#&gt; [1] &quot;Cross-validating CoxPH and SRF Ensemble using 2 repeat(s), 3 outer, 3 inner loops).For SRF inner CV is not used if oob = TRUE (default).&quot;</span></span>
+<span id="cb3-26"><a href="#cb3-26" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-27"><a href="#cb3-27" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-28"><a href="#cb3-28" tabindex="-1"></a>  <span class="er">|</span>                                                                      <span class="er">|</span>   <span class="dv">0</span>%</span>
+<span id="cb3-29"><a href="#cb3-29" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-30"><a href="#cb3-30" tabindex="-1"></a>  <span class="er">|=</span>                                                                     <span class="er">|</span>   <span class="dv">2</span>%</span>
+<span id="cb3-31"><a href="#cb3-31" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-32"><a href="#cb3-32" tabindex="-1"></a>  <span class="er">|============</span>                                                          <span class="er">|</span>  <span class="dv">17</span>%</span>
+<span id="cb3-33"><a href="#cb3-33" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-34"><a href="#cb3-34" tabindex="-1"></a>  <span class="er">|=======================</span>                                               <span class="er">|</span>  <span class="dv">33</span>%</span>
+<span id="cb3-35"><a href="#cb3-35" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>  <span class="er">|===================================</span>                                   <span class="er">|</span>  <span class="dv">50</span>%</span>
+<span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a>  <span class="er">|===============================================</span>                       <span class="er">|</span>  <span class="dv">67</span>%</span>
+<span id="cb3-39"><a href="#cb3-39" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-40"><a href="#cb3-40" tabindex="-1"></a>  <span class="er">|==========================================================</span>            <span class="er">|</span>  <span class="dv">83</span>%</span>
+<span id="cb3-41"><a href="#cb3-41" tabindex="-1"></a>  <span class="sc">|</span>                                                                            </span>
+<span id="cb3-42"><a href="#cb3-42" tabindex="-1"></a>  <span class="er">|======================================================================|</span> <span class="dv">100</span>%</span>
+<span id="cb3-43"><a href="#cb3-43" tabindex="-1"></a><span class="co">#&gt; Time difference of 8.165306 secs</span></span>
+<span id="cb3-44"><a href="#cb3-44" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-45"><a href="#cb3-45" tabindex="-1"></a><span class="co">#&gt; Internally validated test performance of CoxPH     and Survival Random Forest ensemble:</span></span>
+<span id="cb3-46"><a href="#cb3-46" tabindex="-1"></a><span class="co">#&gt;                   T C_score AUCROC      BS BS_scaled Calib_slope Calib_alpha</span></span>
+<span id="cb3-47"><a href="#cb3-47" tabindex="-1"></a><span class="co">#&gt; CoxPH        8.0774  0.6103 0.6303  0.1667    0.0105      0.8752      0.2008</span></span>
+<span id="cb3-48"><a href="#cb3-48" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.0774  0.6687 0.6717  0.1576    0.0640      0.7725      0.2045</span></span>
+<span id="cb3-49"><a href="#cb3-49" tabindex="-1"></a><span class="co">#&gt; Diff         0.0000  0.0584 0.0415 -0.0091    0.0535     -0.1026      0.0037</span></span>
+<span id="cb3-50"><a href="#cb3-50" tabindex="-1"></a><span class="co">#&gt; pvalue          NaN  0.0072 0.0107  0.3152    0.0109      0.8000      0.4706</span></span>
+<span id="cb3-51"><a href="#cb3-51" tabindex="-1"></a><span class="co">#&gt;               sec</span></span>
+<span id="cb3-52"><a href="#cb3-52" tabindex="-1"></a><span class="co">#&gt; CoxPH        0.24</span></span>
+<span id="cb3-53"><a href="#cb3-53" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.17</span></span>
+<span id="cb3-54"><a href="#cb3-54" tabindex="-1"></a><span class="co">#&gt; Diff         7.93</span></span>
+<span id="cb3-55"><a href="#cb3-55" tabindex="-1"></a><span class="co">#&gt; pvalue        NaN</span></span>
+<span id="cb3-56"><a href="#cb3-56" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-57"><a href="#cb3-57" tabindex="-1"></a><span class="co">#&gt; Survival Random Forest ensemble has outperformed CoxPH    by 0.0584 in C-index.</span></span>
+<span id="cb3-58"><a href="#cb3-58" tabindex="-1"></a><span class="co">#&gt; The difference is statistically significant with the p-value 0.0072**.</span></span>
+<span id="cb3-59"><a href="#cb3-59" tabindex="-1"></a><span class="co">#&gt; The supplied data may contain non-linear or cross-term dependencies, </span></span>
+<span id="cb3-60"><a href="#cb3-60" tabindex="-1"></a><span class="co">#&gt; better captured by the Survival Random Forest.</span></span>
+<span id="cb3-61"><a href="#cb3-61" tabindex="-1"></a><span class="co">#&gt; C-score: </span></span>
+<span id="cb3-62"><a href="#cb3-62" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.6103(95CI=0.5584-0.6862;SD=0.0495)</span></span>
+<span id="cb3-63"><a href="#cb3-63" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.6687(95CI=0.6094-0.7177;SD=0.0436)</span></span>
+<span id="cb3-64"><a href="#cb3-64" tabindex="-1"></a><span class="co">#&gt; AUCROC:</span></span>
+<span id="cb3-65"><a href="#cb3-65" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.6303(95CI=0.5669-0.7032;SD=0.054)</span></span>
+<span id="cb3-66"><a href="#cb3-66" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.6717(95CI=0.6006-0.7422;SD=0.0522)</span></span>
+<span id="cb3-67"><a href="#cb3-67" tabindex="-1"></a><span class="fu">summary</span>(compare_models2)</span>
+<span id="cb3-68"><a href="#cb3-68" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-69"><a href="#cb3-69" tabindex="-1"></a><span class="co">#&gt; Internally validated test performance of CoxPH     and Survival Random Forest ensemble:</span></span>
+<span id="cb3-70"><a href="#cb3-70" tabindex="-1"></a><span class="co">#&gt;                   T C_score AUCROC      BS BS_scaled Calib_slope Calib_alpha</span></span>
+<span id="cb3-71"><a href="#cb3-71" tabindex="-1"></a><span class="co">#&gt; CoxPH        8.0774  0.6103 0.6303  0.1667    0.0105      0.8752      0.2008</span></span>
+<span id="cb3-72"><a href="#cb3-72" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.0774  0.6687 0.6717  0.1576    0.0640      0.7725      0.2045</span></span>
+<span id="cb3-73"><a href="#cb3-73" tabindex="-1"></a><span class="co">#&gt; Diff         0.0000  0.0584 0.0415 -0.0091    0.0535     -0.1026      0.0037</span></span>
+<span id="cb3-74"><a href="#cb3-74" tabindex="-1"></a><span class="co">#&gt; pvalue          NaN  0.0072 0.0107  0.3152    0.0109      0.8000      0.4706</span></span>
+<span id="cb3-75"><a href="#cb3-75" tabindex="-1"></a><span class="co">#&gt;               sec</span></span>
+<span id="cb3-76"><a href="#cb3-76" tabindex="-1"></a><span class="co">#&gt; CoxPH        0.24</span></span>
+<span id="cb3-77"><a href="#cb3-77" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.17</span></span>
+<span id="cb3-78"><a href="#cb3-78" tabindex="-1"></a><span class="co">#&gt; Diff         7.93</span></span>
+<span id="cb3-79"><a href="#cb3-79" tabindex="-1"></a><span class="co">#&gt; pvalue        NaN</span></span>
+<span id="cb3-80"><a href="#cb3-80" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-81"><a href="#cb3-81" tabindex="-1"></a><span class="co">#&gt; Survival Random Forest ensemble has outperformed CoxPH    by 0.0584 in C-index.</span></span>
+<span id="cb3-82"><a href="#cb3-82" tabindex="-1"></a><span class="co">#&gt; The difference is statistically significant with the p-value 0.0072**.</span></span>
+<span id="cb3-83"><a href="#cb3-83" tabindex="-1"></a><span class="co">#&gt; The supplied data may contain non-linear or cross-term dependencies, </span></span>
+<span id="cb3-84"><a href="#cb3-84" tabindex="-1"></a><span class="co">#&gt; better captured by the Survival Random Forest.</span></span>
+<span id="cb3-85"><a href="#cb3-85" tabindex="-1"></a><span class="co">#&gt; C-score: </span></span>
+<span id="cb3-86"><a href="#cb3-86" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.6103(95CI=0.5584-0.6862;SD=0.0495)</span></span>
+<span id="cb3-87"><a href="#cb3-87" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.6687(95CI=0.6094-0.7177;SD=0.0436)</span></span>
+<span id="cb3-88"><a href="#cb3-88" tabindex="-1"></a><span class="co">#&gt; AUCROC:</span></span>
+<span id="cb3-89"><a href="#cb3-89" tabindex="-1"></a><span class="co">#&gt;   CoxPH      0.6303(95CI=0.5669-0.7032;SD=0.054)</span></span>
+<span id="cb3-90"><a href="#cb3-90" tabindex="-1"></a><span class="co">#&gt;   SRF_Ensemble 0.6717(95CI=0.6006-0.7422;SD=0.0522)</span></span></code></pre></div>
+<p>Detailed results can be extracted from the output object. For
+example, test performance for each data split (across all
+cross-validations and repetitions).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Test performance of the ensemble:</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(compare_models2<span class="sc">$</span>test<span class="sc">$</span>SRF_ensemble,<span class="dv">4</span>))</span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co">#&gt;        T AUCROC     BS BS_scaled C_score Calib_slope Calib_alpha test</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="co">#&gt; 1 8.0774 0.5931 0.1860    0.0007  0.6053      0.3219      0.3983    1</span></span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="co">#&gt; 2 8.0774 0.7473 0.1575    0.1583  0.7188      1.1482      0.4151    1</span></span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a><span class="co">#&gt; 3 8.0774 0.7065 0.1213    0.0818  0.7100      1.2563     -0.2601    1</span></span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a><span class="co">#&gt; 4 8.0774 0.6526 0.1390    0.0618  0.6831      0.6430      0.1879    1</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a><span class="co">#&gt; 5 8.0774 0.6592 0.1847    0.0346  0.6386      0.6200      0.5382    1</span></span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a><span class="co">#&gt; 6 8.0774 0.6716 0.1570    0.0467  0.6562      0.6458     -0.0524    1</span></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="co"># Mean test performance of the Cox-PH and SRF ensemble:</span></span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">round</span>(compare_models2<span class="sc">$</span>results_mean,<span class="dv">4</span>))</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1"></a><span class="co">#&gt;                   T C_score AUCROC      BS BS_scaled Calib_slope Calib_alpha</span></span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1"></a><span class="co">#&gt; CoxPH        8.0774  0.6103 0.6303  0.1667    0.0105      0.8752      0.2008</span></span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.0774  0.6687 0.6717  0.1576    0.0640      0.7725      0.2045</span></span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1"></a><span class="co">#&gt; Diff         0.0000  0.0584 0.0415 -0.0091    0.0535     -0.1026      0.0037</span></span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1"></a><span class="co">#&gt; pvalue          NaN  0.0072 0.0107  0.3152    0.0109      0.8000      0.4706</span></span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1"></a><span class="co">#&gt;               sec</span></span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1"></a><span class="co">#&gt; CoxPH        0.24</span></span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a><span class="co">#&gt; SRF_Ensemble 8.17</span></span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a><span class="co">#&gt; Diff         7.93</span></span>
+<span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="co">#&gt; pvalue        NaN</span></span>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1"></a></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1"></a><span class="co"># Main stats </span></span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1"></a> <span class="fu">round</span>(compare_models2<span class="sc">$</span>main_stats,<span class="dv">4</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1"></a><span class="co">#&gt;                        mean     sd 95CILow 95CIHigh</span></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1"></a><span class="co">#&gt; C_score_CoxPH        0.6103 0.0495  0.5584   0.6862</span></span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1"></a><span class="co">#&gt; C_score_SRF_Ensemble 0.6687 0.0436  0.6094   0.7177</span></span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1"></a><span class="co">#&gt; AUCROC_CoxPH         0.6303 0.0540  0.5669   0.7032</span></span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1"></a><span class="co">#&gt; AUCROC_SRF_Ensemble  0.6717 0.0522  0.6006   0.7422</span></span></code></pre></div>
+</div>
+<div id="example-3.-applying-survcompare-to-gbsg-data" class="section level3">
+<h3>Example 3. Applying <code>survcompare</code> to GBSG data</h3>
+<p>Now, lets apply the package to a real life data. We will use GBSG
+data from the survival package (<a href="https://rdrr.io/cran/survival/man/gbsg.html" class="uri">https://rdrr.io/cran/survival/man/gbsg.html</a>).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#prepare the data</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>mygbsg <span class="ot">&lt;-</span> gbsg</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>mygbsg<span class="sc">$</span>time <span class="ot">&lt;-</span> gbsg<span class="sc">$</span>rfstime <span class="sc">/</span> <span class="dv">365</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>mygbsg<span class="sc">$</span>event <span class="ot">&lt;-</span> gbsg<span class="sc">$</span>status</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a>myfactors <span class="ot">&lt;-</span></span>
+<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;age&quot;</span>, <span class="st">&quot;meno&quot;</span>, <span class="st">&quot;size&quot;</span>, <span class="st">&quot;grade&quot;</span>, <span class="st">&quot;nodes&quot;</span>, <span class="st">&quot;pgr&quot;</span>, <span class="st">&quot;er&quot;</span>, <span class="st">&quot;hormon&quot;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a>mygbsg <span class="ot">&lt;-</span> mygbsg[<span class="fu">c</span>(<span class="st">&quot;time&quot;</span>, <span class="st">&quot;event&quot;</span>, myfactors)]</span>
+<span id="cb5-10"><a href="#cb5-10" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(mygbsg[myfactors])) <span class="co">#check if any missing data</span></span>
+<span id="cb5-11"><a href="#cb5-11" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" tabindex="-1"></a><span class="co"># run survcompare </span></span>
+<span id="cb5-13"><a href="#cb5-13" tabindex="-1"></a><span class="fu">survcompare</span>(mygbsg, myfactors, <span class="at">randomseed =</span> <span class="dv">42</span>, <span class="at">repeat_cv =</span> <span class="dv">5</span>)</span>
+<span id="cb5-14"><a href="#cb5-14" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" tabindex="-1"></a><span class="co"># [1] &quot;Cross-validating Cox PH model using 5 repeat(s), 3 outer, 3 inner loops)&quot;</span></span>
+<span id="cb5-16"><a href="#cb5-16" tabindex="-1"></a><span class="co">#   |===============================================================| 100%</span></span>
+<span id="cb5-17"><a href="#cb5-17" tabindex="-1"></a><span class="co"># Time difference of 1.142473 secs</span></span>
+<span id="cb5-18"><a href="#cb5-18" tabindex="-1"></a><span class="co"># [1] &quot;Cross-validating CoxPH and SRF Ensemble using 5 repeat(s), 3 outer, 3 inner loops)&quot;</span></span>
+<span id="cb5-19"><a href="#cb5-19" tabindex="-1"></a><span class="co">#   |===============================================================| 100%</span></span>
+<span id="cb5-20"><a href="#cb5-20" tabindex="-1"></a><span class="co"># Time difference of 49.34405 secs</span></span>
+<span id="cb5-21"><a href="#cb5-21" tabindex="-1"></a><span class="co"># </span></span>
+<span id="cb5-22"><a href="#cb5-22" tabindex="-1"></a><span class="co"># Internally validated test performance of CoxPH     and Survival Random Forest ensemble:</span></span>
+<span id="cb5-23"><a href="#cb5-23" tabindex="-1"></a><span class="co">#                   T C_score AUCROC      BS BS_scaled Calib_slope</span></span>
+<span id="cb5-24"><a href="#cb5-24" tabindex="-1"></a><span class="co"># CoxPH        4.1797  0.6751 0.7203  0.2182    0.1489      1.2529</span></span>
+<span id="cb5-25"><a href="#cb5-25" tabindex="-1"></a><span class="co"># SRF_Ensemble 4.1797  0.6938 0.7279  0.2162    0.1567      1.3961</span></span>
+<span id="cb5-26"><a href="#cb5-26" tabindex="-1"></a><span class="co"># Diff         0.0000  0.0187 0.0076 -0.0020    0.0078      0.1432</span></span>
+<span id="cb5-27"><a href="#cb5-27" tabindex="-1"></a><span class="co"># pvalue          NaN  0.0000 0.0744  0.4534    0.0919      0.0229</span></span>
+<span id="cb5-28"><a href="#cb5-28" tabindex="-1"></a><span class="co">#              Calib_alpha   sec</span></span>
+<span id="cb5-29"><a href="#cb5-29" tabindex="-1"></a><span class="co"># CoxPH             0.4193  1.14</span></span>
+<span id="cb5-30"><a href="#cb5-30" tabindex="-1"></a><span class="co"># SRF_Ensemble      0.4186 49.34</span></span>
+<span id="cb5-31"><a href="#cb5-31" tabindex="-1"></a><span class="co"># Diff             -0.0007 48.20</span></span>
+<span id="cb5-32"><a href="#cb5-32" tabindex="-1"></a><span class="co"># pvalue            0.5410   NaN</span></span></code></pre></div>
+<p>We got the following results (depending on a random seed, it may
+slightly differ):</p>
+<pre><code>Survival Random Forest ensemble has outperformed CoxPH    by 0.0187 in C-index. The difference is statistically significant with the p-value 1.347e-05***. The supplied data may contain non-linear or cross-term dependencies, better captured by the Survival Random Forest.
+
+C-score: 
+  
+  CoxPH      0.6751(95CI=0.6417-0.7137;SD=0.0231)
+  
+  SRF_Ensemble 0.6938(95CI=0.6596-0.7346;SD=0.0212)
+
+AUCROC:
+  
+  CoxPH      0.7203(95CI=0.6693-0.7708;SD=0.0356)
+  
+  SRF_Ensemble 0.7279(95CI=0.6797-0.7781;SD=0.0311)
+ 
+ See other items as x$item. Items available: results_mean, results_mean_train, return_models, test, train, difftest, main_stats, randomseed, useCoxLasso</code></pre>
+<p>This example illustrates a situation when outperformance of the
+non-linear model is statistically significant, but not large in absolute
+terms. The ultimate model choice will depend on how critical such an
+improvement is for the model stakeholders.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
