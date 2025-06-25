@@ -46,7 +46,8 @@ survsrfstack_predict <-
 #' @param max_grid_size number of random grid searches for model tuning
 #' @param verbose FALSE(default)/TRUE
 #' @return output = list(bestparams, allstats, model)
-#' @examples
+#' @examples \donttest{
+#' \dontshow{rfcores_old <- options()$rf.cores; options(rf.cores=1)}
 #' d <-simulate_nonlinear(100)
 #' p<- names(d)[1:4]
 #' tuningparams = list(
@@ -55,6 +56,8 @@ survsrfstack_predict <-
 #'  "nodesize" =    c(20,30,50)
 #' )
 #' m_srf<- survsrf_train(d,p,tuningparams=tuningparams)
+#' \dontshow{options(rf.cores=rfcores_old)}
+#' }
 #' @export
 survsrfstack_train <-
   function(df_train,
@@ -215,6 +218,8 @@ survsrfstack_train <-
 #' @param max_grid_size number of random grid searches for model tuning
 #' @param verbose FALSE(default)/TRUE
 #' @param suppresswarn TRUE/FALSE, TRUE by default
+#' @param impute  0/1/2/3 for no imputation / option 1 (proper way) / option 2 (faster way) / option 3 (complete cases), more in documentation and vignette
+#' @param impute_method "missForest"
 #' @export
 survsrfstack_cv <- function(df,
                          predict.factors,
@@ -228,14 +233,24 @@ survsrfstack_cv <- function(df,
                          tuningparams = list(),
                          max_grid_size =10,
                          verbose = FALSE,
-                         suppresswarn = TRUE
+                         suppresswarn = TRUE,
+                         impute = 0,
+                         impute_method = "missForest"
 ) {
   Call <- match.call()
-
-  if (sum(is.na(df[c("time", "event", predict.factors)])) > 0) {
-    stop("Missing data can not be handled. Please impute first.")
-  }
+  inputs <- list(df , predict.factors, fixed_time,
+                 outer_cv,inner_cv, repeat_cv,
+                 randomseed, return_models,
+                 useCoxLasso,tuningparams)
+  inputclass<- list(df = "data.frame", predict.factors = "character",
+                    fixed_time = "numeric",outer_cv = "numeric",
+                    inner_cv = "numeric", repeat_cv = "numeric",
+                    randomseed = "numeric",return_models = "logical",
+                    useCoxLasso="logical", tuningparams = "list")
+  cp<- check_call(inputs, inputclass, Call)
+  if (cp$anyerror) stop (paste(cp$msg[cp$msg!=""], sep=""))
   if (suppresswarn){ user_warn <-options()$warn; options(warn=-1)}
+
   output <- surv_CV(
     df = df,
     predict.factors = predict.factors,
@@ -254,7 +269,9 @@ survsrfstack_cv <- function(df,
                       "fixed_time" = fixed_time,
                       "verbose" = verbose),
     predict_args = list("predict.factors" = predict.factors),
-    model_name = "Stacked_SRF_CoxPH"
+    model_name = "Stacked_SRF_CoxPH",
+    impute = impute,
+    impute_method = impute_method
   )
   if (suppresswarn){ options(warn=user_warn)}
   output$call <- Call

@@ -1,8 +1,8 @@
 Package: survcompare
 Title: Nested Cross-Validation to Compare Cox-PH, Cox-Lasso, Survival
         Random Forests
-Version: 0.2.0
-Date: 2024-10-02
+Version: 0.3.0
+Date: 2025-06-25
 Authors@R: c(
       person("Diana", "Shamsutdinova", , "diana.shamsutdinova.github@gmail.com", role = c("aut", "cre"), 
              comment = c(ORCID = "0000-0003-2434-3641")),
@@ -13,16 +13,17 @@ Description: Performs repeated nested cross-validation for Cox Proportionate Haz
 License: GPL (>= 3)
 Encoding: UTF-8
 Depends: R (>= 4.1), survival (>= 3.0)
-Imports: stats, timeROC, caret, glmnet, randomForestSRC
+Imports: stats, timeROC, caret, glmnet, randomForestSRC,
+        missForestPredict
 RoxygenNote: 7.3.2
 Suggests: knitr, rmarkdown, testthat (>= 3.0.0)
 VignetteBuilder: knitr
 Maintainer: Diana Shamsutdinova <diana.shamsutdinova.github@gmail.com>
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2024-10-05 08:16:26 UTC; dinab
-Author: Diana Shamsutdinova [aut, cre]
-    (<https://orcid.org/0000-0003-2434-3641>),
-  Daniel Stahl [aut] (<https://orcid.org/0000-0001-7987-6619>)
+Packaged: 2025-06-25 14:22:19 UTC; k2366567
+Author: Diana Shamsutdinova [aut, cre] (ORCID:
+    <https://orcid.org/0000-0003-2434-3641>),
+  Daniel Stahl [aut] (ORCID: <https://orcid.org/0000-0001-7987-6619>)
 Repository: CRAN
-Date/Publication: 2024-10-05 17:00:01 UTC
+Date/Publication: 2025-06-25 15:00:02 UTC

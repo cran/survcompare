@@ -26,7 +26,18 @@ The performance metrics include [5]:
  * Calibration measures: calibration slope, calibration alpha.
  * Overall fit: Brier score, Scaled Brier score. 
 
+![image](https://github.com/dianashams/ensemble-methods-for-survival-analysis/blob/gh-pages/Survcompare_workflow.png)
+
+Missing data handling:
+ * In all cross-validation functions, parameter 'impute' defines imputation strategy.
+ * Impute = 0 means no imputation to be performed, the function is aborted if missing values are in predictors, event or time.
+ * Impute = 1 means imputation by missForest is performed in a proper way: during cross-validation, missForest imputer is trained on the train dataset, and used to impute both the train and the test. 
+ * Impute = 2 means imputation by missForest in a fast way, where the entire data is imputed, then nested cross-validation is performed. There is some leakage of information from the test set into the train set as imputed values in the train set used all the data including test.
+ * Impute = 3 means complete cases analysis. Only instances (rows) with no missing data in predict.factors, event, and time columns are used.
+ 
 NB: Sequential ensemble is the first ensemble method described in https://dianashams.github.io/ensemble-methods-for-survival-analysis/ as published in Shamsutdinova, Stamate, Roberts, & Stahl (2022, June) [6]. 
+
+![image](https://github.com/dianashams/ensemble-methods-for-survival-analysis/blob/gh-pages/Survcompare_missing_data.png)
 
 ### Getting started 
 You can install the package from CRAN as `install.packages("survcompare")`, or from its github directory by running the `devtools::install_github("dianashams/survcompare")` command. The main function to use is `survcompare(data, predictors)`. The data should be in a form of a data frame, with "time" and "event" columns defining the survival outcome. A list of column names corresponding to the predictors to be used should also be supplied.
@@ -161,4 +172,4 @@ The authors received financial support by the National Institute for Health Rese
 
 [5] Steyerberg EW, Vergouwe Y. (2014). Towards better clinical prediction models: seven steps for development and an ABCD for validation. *European heart journal, 35(29)*, 1925-1931 <https://doi.org/10.1093/eurheartj/ehu207>
 
-[6] Shamsutdinova, D., Stamate, D., Roberts, A., & Stahl, D. (2022, June). Combining Cox Model and Tree-Based Algorithms to Boost Performance and Preserve Interpretability for Health Outcomes. In IFIP International Conference on Artificial Intelligence Applications and Innovations (pp. 170-181). Cham: Springer International Publishing.
+[6] Shamsutdinova, D., Stamate, D., Roberts, A., & Stahl, D. (2022, June). Combining Cox Model and Tree-Based Algorithms to Boost Performance and Preserve Interpretability for Health Outcomes. In IFIP International Conference on Artificial Intelligence Applications and Innovations (pp. 170-181). Cham: Springer International Publishing. <https://www.springerprofessional.de/en/combining-cox-model-and-tree-based-algorithms-to-boost-performan/23173710>

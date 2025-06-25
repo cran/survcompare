@@ -25,15 +25,19 @@
 #' @importFrom stats sd
 #' @importFrom randomForestSRC rfsrc
 #' @importFrom survival coxph
+#' @importFrom missForestPredict missForestPredict
+#' @importFrom missForestPredict missForest
 #' @param base an object of type "survensemble_cv", for example, outcomes of survcox_cv, survsrf_cv, survsrfens_cv, survsrfstack_cv
 #' @param alternative an object of type "survensemble_cv", to compare to "base"
 #' @return outcome = list(data frame with performance results, fitted Cox models, fitted DeespSurv)
-#' @examples
+#' @examples 
+#' \dontshow{rfcores_old <- options()$rf.cores; options(rf.cores=1)}
 #' df <-simulate_nonlinear(100)
 #' params <- names(df)[1:4]
 #' cv1 <- survcox_cv(df, params, randomseed = 42, repeat_cv =1)
 #' cv2 <- survsrf_cv(df, params, randomseed = 42, repeat_cv = 1)
 #' survcompare2(cv1, cv2)
+#' \dontshow{options(rf.cores=rfcores_old)}
 #' @export
 survcompare2 <- function(base, alternative) {
 

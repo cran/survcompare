@@ -29,9 +29,11 @@ The function is designed to help with the model selection by quantifying the los
 performance (if any) if "alternative" is used instead of "base."
 }
 \examples{
+\dontshow{rfcores_old <- options()$rf.cores; options(rf.cores=1)}
 df <-simulate_nonlinear(100)
 params <- names(df)[1:4]
 cv1 <- survcox_cv(df, params, randomseed = 42, repeat_cv =1)
 cv2 <- survsrf_cv(df, params, randomseed = 42, repeat_cv = 1)
 survcompare2(cv1, cv2)
+\dontshow{options(rf.cores=rfcores_old)}
 }

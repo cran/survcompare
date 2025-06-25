@@ -47,6 +47,7 @@ Ishwaran H, Kogalur UB, Blackstone EH, Lauer MS. Random survival forests.
 The Annals of Applied Statistics. 2008;2:841–60.
 }
 \examples{
+\dontshow{rfcores_old <- options()$rf.cores; options(rf.cores=1)}
 d <-simulate_nonlinear(100)
 p<- names(d)[1:4]
 tuningparams = list(
@@ -55,4 +56,5 @@ tuningparams = list(
  "nodesize" =    c(20,30,50)
 )
 m_srf<- survsrf_train(d,p,tuningparams=tuningparams)
+\dontshow{options(rf.cores=rfcores_old)}
 }
